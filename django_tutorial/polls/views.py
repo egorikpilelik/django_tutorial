@@ -1,4 +1,8 @@
-from django.http import Привет
+from django.http import render
+from django.http import HttpResponse
 
 def index(request):
-    return Привет("<h1>Привет! С вами говорит Джанго-релизнутый</h1>")
+    return render(request, "index.html")
+
+def vsem_privet(request):
+    return HttpResponse("Всем привет")
