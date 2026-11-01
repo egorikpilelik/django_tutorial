@@ -1,22 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
-    <title>Document</title>
-</head>
-<body>
-    {% if latest_question_list %}
-    <ul>
-        {% for question in latest_question_list %}
-        <li><a href="/{{ question.id }}">{{question.question_text}}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>Нет дочтупных вопросов</p>
-    {% endif %}
+ {% extends "base.html" %}
 
-     <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
-</body>
-</html>
+ {%  block content %}
+ <h1 class="mb-4">Опросы</h1>
+ <table class="table table-hover align-middle shadow-sm">
+    <thead class="table-dark">
+        <tr><th>№</th><th>Вопрос</th><th>Опубликовано</th><th>Голосов</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for question in latest_question_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{question.question_text}}</td>
+            <td>{{question.pub_date|date:"d.m.y"}}</td>
+            <td><span class="badge bg-secondary">{{question.total_votes|default:0}}</span></td>
+            <td class="text-end"><a href="{% url 'detail' question.id %}" class="btn btn-primaty btn-sm">Голосовать</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">Пока ни одного опроса</td></tr>
+        {% endfor %}
+    </tbody>
+ </table>
+ {% endblock %}
