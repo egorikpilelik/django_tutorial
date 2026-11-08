@@ -7,13 +7,13 @@
         {% if error_message %}
         <div class="alern alern-danger">{{ error_message }}</div>
         {% endif %}
-        <form action="{% url  question.id %}"method="post">
+        <form action="{% url 'vote' question.id %}"method="post">
             {% csrf_token %}
             {% for choice in question.choice_set.all %}
             <div class="form-check mb-2">
                 <input class="form-check-input" type="radio" name="choice" id="choice{{ choice.id }}" value="{{ choice.id }}">
                 <label class="form-check-label" for="choice{{ choice.id }}">
-                    {{ choice.choice_text }}
+                    {{ choice.Choice_text }}
                 </label>
             </div>
             {% endfor %}
