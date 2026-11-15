@@ -4,11 +4,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Question, Choice
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils import timezone
 
 # def index(request):
 #         latest_question_list = Question.objects.order_by('-pub_date')[:5]
 #         context = {'latest_question_list': latest_question_list}
 #         return render(request, 'index.html', context)
+
+def published():
+        """Вопросы, у которых дата публикации уже наступила."""
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 def index(request):
         latest_question_list = Question.objects.annotate(
@@ -19,11 +24,12 @@ def index(request):
 
 
 def detail(request, question_id):
-        question = get_object_or_404(Question, pk=question_id)
+
+        question = get_object_or_404(published(), pk=question_id)
         return render(request, 'detail.html', {'question': question })
 
 def vote (request, question_id):
-        question = get_object_or_404(Question, pk=question_id)
+        question = get_object_or_404(published(), pk=question_id)
         try:
                 selected_choice = question.choice_set.get(pk=request.POST["choice"])
         except (KeyError, Choice.DoesMotExist):
@@ -37,10 +43,11 @@ def vote (request, question_id):
         return HttpResponseRedirect(reverse("results", aegs=(question.id,)))
 
 def results(request, question_id):
-        question = get_object_or_404(Question, pk=question_id)
+        question = get_object_or_404(published(), pk=question_id)
         choices = list(question.choice_set.all())
         total = sum(choice.votes for choice in choices)
         for choice in choices:
                 choice.percent = round(choice.votes * 100 / total) if total else 0
         context = {"question": question, "choices": choices, "total": total}
         return render(request, "results.html", context)
+
