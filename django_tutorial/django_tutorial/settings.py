@@ -26,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
+ALLOWED_HOSTS = ["127.0.0.1", "localhost",
+                "ЛОГИН.pythonanywhere.com"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -114,6 +114,8 @@ TIME_ZONE = 'Asia/Yekaterinburn'
 USE_I18N = True
 
 USE_TZ = True
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Static files (CSS, JavaScript, Images)
